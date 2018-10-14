@@ -37,4 +37,4 @@ class EncryptedMessage(Message):
 
     def get_text(self):
         return self.ciphertext.ciphertext_string
-    
+

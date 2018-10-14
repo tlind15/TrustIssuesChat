@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class Encrypter(ABC):
+class Encryptor(ABC):
 
     def __init__(self):
         pass
