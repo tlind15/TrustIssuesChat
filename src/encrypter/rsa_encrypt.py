@@ -1,19 +1,15 @@
-from abc import ABC
-from encrypter import Encrypter
+from src.encrypter.encryptor import Encryptor
 from cryptography.hazmat.primitives.asymmetric import padding, rsa
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.serialization import load_pem_public_key, load_pem_private_key
 from cryptography.hazmat.backends import default_backend
 
 
-class RSAEncrypt(Encrypter):
-
-    def __init__(self):
-        pass
+class RSAEncrypt(Encryptor):
 
     def encrypt(self, message, key):
         return key.encrypt(
-            message.encode(),
+            message,
             padding.OAEP(
                 mgf=padding.MGF1(algorithm=hashes.SHA256()),
                 algorithm=hashes.SHA256(),

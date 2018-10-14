@@ -3,20 +3,19 @@ from cryptography.hazmat.primitives.ciphers import Cipher, modes
 from cryptography.hazmat.backends import default_backend
 from os import urandom
 from cryptography.hazmat.primitives import padding
-from src.encrypter import encryptor
-from src.message import *
+from src.encrypter.encryptor import Encryptor
 
 
-class AESEncrypt(encryptor.Encryptor):
+class AESEncrypt(Encryptor):
 
-    def encrypt(self, message, key=None):
+    def encrypt(self, message_text, key=None):
         if key is None:
             key = self.get_key()
 
         algorithm = AES(key)
         cipher = Cipher(algorithm, mode=modes.CBC(self.get_iv()), backend=default_backend())
-        encrypted_text = cipher.encryptor().update(self.pad_data(message)) + cipher.encryptor.finalize()
-        return EncryptedMessage(None, Ciphertext(encrypted_text, key))
+        encrypted_text = cipher.encryptor().update(self.pad_data(message_text)) + cipher.encryptor().finalize()
+        return encrypted_text, key
 
     def get_key(self):
         return urandom(32)
