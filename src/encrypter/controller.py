@@ -4,13 +4,13 @@ from src.message.message import EncryptedMessage
 
 class EncryptionController(object):
 
-    def __init__(self, message_text, rsa_public_key_path):
-        self.message_text = message_text
+    def __init__(self, message_obj, rsa_public_key_path):
+        self.message_obj = message_obj
         self.rsa_public_key_path = rsa_public_key_path
 
     def encrypt_message(self):
         aes_encryptor = aes_encrypt.AESEncrypt()
-        aes_ciphertext, aes_key = aes_encryptor.encrypt(self.message_text)
+        aes_ciphertext, aes_key = aes_encryptor.encrypt(self.message_obj.get_text())
 
         hmac_tag_generator = hmac_tag.HMAC()
         hashed_message_obj = hmac_tag_generator.generate_tag(aes_ciphertext)

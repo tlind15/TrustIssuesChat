@@ -1,7 +1,8 @@
 from src.encrypter.controller import EncryptionController
+from src.message.message import PlaintextMessage
 
 text = "My Name is Thomas"
-controller = EncryptionController(text, "C:\\Users\\tlindblom\\RSAKeys\\public.pem")
+controller = EncryptionController(PlaintextMessage(text), "C:\\Users\\tlindblom\\RSAKeys\\public.pem")
 encrypted_message = controller.encrypt_message()
 
 print(encrypted_message.get_text())
