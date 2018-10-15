@@ -8,6 +8,13 @@ from cryptography.hazmat.backends import default_backend
 class RSAEncrypt(Encryptor):
 
     def encrypt(self, message, key):
+        """
+        Encrypts a message using a 2048-bit RSA key
+
+        :param message: a byte String containing the key (or key concatenated together) to be encrypted
+        :param key: a byte String representing the RSA public key
+        :return: a byte String representing the encrypted message
+        """
         return key.encrypt(
             message,
             padding.OAEP(
@@ -18,6 +25,12 @@ class RSAEncrypt(Encryptor):
         )
 
     def get_key(self, key_path):
+        """
+        Loads the RSA public from the user's local machine
+
+        :param key_path: a String representing the path on the user's local machine containing the RSA public key
+        :return: an RSAPublicKey object from the Cryptography library to be used in the 'encrypt' method
+        """
         with open(key_path, "rb") as key_file:
             public_key = load_pem_public_key(
                 key_file.read(),
