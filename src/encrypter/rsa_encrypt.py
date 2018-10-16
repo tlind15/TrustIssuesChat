@@ -15,12 +15,14 @@ class RSAEncrypt(Encryptor):
         :param key: a byte String representing the RSA public key
         :return: a byte String representing the encrypted message
         """
+        if isinstance(message, str):
+            message.encode()
 
-        if not isinstance(message, bytes):
+        elif not isinstance(message, bytes):
             raise TypeError("The argument 'message' is not of type 'bytes'")
 
         if not isinstance(key, rsa.RSAPublicKey):
-            raise TypeError("Thr argument 'key' is not a valid RSA public key")
+            raise TypeError("The argument 'key' is not a valid RSA public key")
 
         return key.encrypt(
             message,
@@ -38,11 +40,21 @@ class RSAEncrypt(Encryptor):
         :param key_path: a String representing the path on the user's local machine containing the RSA public key
         :return: an RSAPublicKey object from the Cryptography library to be used in the 'encrypt' method
         """
-        with open(key_path, "rb") as key_file:
-            public_key = load_pem_public_key(
-                key_file.read(),
-                backend=default_backend()
-            )
+
+        if not isinstance(key_path, str):
+            raise TypeError("The argument 'key_path' is not of type 'str'")
+
+        public_key = None
+
+        try:
+            with open(key_path, "rb") as key_file:
+                public_key = load_pem_public_key(
+                    key_file.read(),
+                    backend=default_backend()
+                )
+        except IOError:
+            print("Could not find RSA key")
+
         return public_key
 
     '''def get_priv_key(self, key_path):
@@ -53,21 +65,3 @@ class RSAEncrypt(Encryptor):
                 backend=default_backend()
             )
         return private_key'''
-
-
-
-'''r = RSAEncrypt()
-plaintext = "hello"
-print(plaintext)
-ciphertext = r.encrypt(plaintext, r.get_key("C:\\Users\\tlindblom\\RSAKeys\\public.pem"))
-print(ciphertext)
-new_plaintext = r.get_priv_key("C:\\Users\\tlindblom\\RSAKeys\\private.pem").decrypt(
-    ciphertext,
-    padding.OAEP(
-        mgf=padding.MGF1(algorithm=hashes.SHA256()),
-        algorithm=hashes.SHA256(),
-        label=None
-    )
-)
-print(new_plaintext.decode())
-'''

@@ -15,9 +15,9 @@ class PlaintextMessage(Message):
 
     def __init__(self, message_text):
         """
-        :param message_text: a String corresponding to the message text
+        :param message_text: a byte String corresponding to the message text
         """
-        self.text = message_text.encode()
+        self.text = message_text
 
     def get_text(self):
         """

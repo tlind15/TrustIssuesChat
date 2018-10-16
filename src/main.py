@@ -1,8 +1,5 @@
 from src.ui.trustissues_chat import TrustIssuesChat
 
-TrustIssuesChat.start()
-
-
 '''controller = EncryptionController(PlaintextMessage(text), "C:\\Users\\tlindblom\\RSAKeys\\public.pem")
 encrypted_message = controller.encrypt_message()
 

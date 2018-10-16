@@ -3,9 +3,16 @@ class MessageInput(object):
 
     @staticmethod
     def read_message():
-        message_text = input("\nEnter message: ")
+        while True:
+            try:
+                message_text = str(input("\nEnter message: "))
+                if message_text.strip() == "":
+                    print("\nNot a valid message\n")
+                else:
+                    break
 
-        # do error checking...
+            except TypeError:
+                print("\nNot a valid message\n")
 
         return message_text
 

@@ -16,7 +16,10 @@ class AESEncrypt(Encryptor):
         :param key: (optional) a byte String representing an AES key. Must be 256 bits in length
         :return: a byte String containing the encrypted text, a byte String containing the AES key (respectively)
         """
-        if not isinstance(message_text, bytes):  # this also captures message_text == None
+        if isinstance(message_text, str):
+            message_text.encode()
+
+        elif not isinstance(message_text, bytes):  # this also captures message_text == None
             raise TypeError("The argument 'message_text' is not of type 'bytes'")
 
         if key is None:
@@ -60,6 +63,9 @@ class AESEncrypt(Encryptor):
         """
         if message is None:
             message = ""
+
+        elif isinstance(message, str):
+            message.encode()
 
         elif not isinstance(message, bytes):
             raise ValueError("The argument 'message' is not of type 'bytes'")

@@ -1,5 +1,5 @@
 from src.encrypter import aes_encrypt, rsa_encrypt, hmac_tag
-from src.message.message import EncryptedMessage
+from src.message.message import Message, EncryptedMessage
 
 
 class EncryptionController(object):
@@ -11,6 +11,12 @@ class EncryptionController(object):
         :param message_obj: an instance of the 'Message' class containing the message to be encrypted
         :param rsa_public_key_path: a String representing the file path to an RSA public key file on the user's local machine
         """
+        if not isinstance(message_obj, Message):
+            raise TypeError("The argument 'message_obj' is not of type 'Message'")
+
+        if not isinstance(rsa_public_key_path, str):
+            raise TypeError("The argument 'rsa_public_key_path' is not of type 'str'")
+
         self.message_obj = message_obj
         self.rsa_public_key_path = rsa_public_key_path
 
@@ -20,11 +26,25 @@ class EncryptionController(object):
 
         :return: returns an instance of the 'EncryptedMessage' class that can be used by other modules
         """
+
+        # we need to make sure the message_text parameter in the message_obj is of a correct type
+        if isinstance(self.message_obj.get_text(), str):
+            self.message_obj.get_text().encode()
+
+        elif not isinstance(self.message_obj.get_text(), bytes):
+            raise TypeError("The message text is not of type 'bytes'")
+
+        # we don't have to check the type of the key path since that was done in the constructor
+
         aes_ciphertext, aes_key = self._perform_message_encrpytion(self.message_obj.get_text())
-        hash_message_text, mac_key = self._perform_message_encrpytion(aes_ciphertext)
+        hash_message_text, mac_key = self._generate_integrity_tag(aes_ciphertext)
         rsa_ciphertext = self._perform_rsa_encryption(aes_key + mac_key, self.rsa_public_key_path)
-        return EncryptedMessage(key_ciphertext=rsa_ciphertext, message_ciphertext=aes_ciphertext,
-                                message_authentication_tag=hash_message_text)
+
+        if rsa_ciphertext is None:
+            return None
+        else:
+            return EncryptedMessage(key_ciphertext=rsa_ciphertext, message_ciphertext=aes_ciphertext,
+                                    message_authentication_tag=hash_message_text)
 
     def _perform_message_encrpytion(self, message_text):
         """
@@ -56,4 +76,7 @@ class EncryptionController(object):
         """
         rsa_encryptor = rsa_encrypt.RSAEncrypt()
         rsa_key = rsa_encryptor.get_key(key_path)
+
+        if rsa_key is None:
+            return None
         return rsa_encryptor.encrypt(message, rsa_key)

@@ -16,10 +16,19 @@ class HMAC(object):
 
         :param message_text: a byte String representing the ciphertext from which to compute the integrity tag
         :param key: a byte String representing a randomly generated 256-bit (32 byte) key
-        :return:
+        :return: a HMACHashedMessage object containing the hashed integrity tag, the key, and hashing algorithm used
         """
+        if isinstance(message_text, str):
+            message_text.encode()
+
+        elif not isinstance(message_text, bytes):
+            raise TypeError("The argument 'message_text' is not of type 'bytes'")
+
         if key is None:
             key = HMAC.get_key()
+
+        elif not isinstance(key, bytes):
+            raise TypeError("The argument 'key' is not of type 'bytes'")
 
         tag_generator = hmac.HMAC(key, hashes.SHA256(), backend=default_backend())
         tag_generator.update(message_text)  # hashes the message
