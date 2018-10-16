@@ -15,6 +15,13 @@ class RSAEncrypt(Encryptor):
         :param key: a byte String representing the RSA public key
         :return: a byte String representing the encrypted message
         """
+
+        if not isinstance(message, bytes):
+            raise TypeError("The argument 'message' is not of type 'bytes'")
+
+        if not isinstance(key, rsa.RSAPublicKey):
+            raise TypeError("Thr argument 'key' is not a valid RSA public key")
+
         return key.encrypt(
             message,
             padding.OAEP(

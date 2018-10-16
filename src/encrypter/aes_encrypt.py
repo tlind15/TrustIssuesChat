@@ -16,8 +16,17 @@ class AESEncrypt(Encryptor):
         :param key: (optional) a byte String representing an AES key. Must be 256 bits in length
         :return: a byte String containing the encrypted text, a byte String containing the AES key (respectively)
         """
+        if not isinstance(message_text, bytes):  # this also captures message_text == None
+            raise TypeError("The argument 'message_text' is not of type 'bytes'")
+
         if key is None:
             key = self.get_key()
+
+        elif not isinstance(key, bytes):
+            raise TypeError("The argument 'key' is not of type 'bytes'")
+
+        elif len(key) != 32:
+            raise ValueError("The argument 'key' is not 256 bits in length")
 
         algorithm = AES(key)
         cipher = Cipher(algorithm, mode=modes.CBC(self.get_iv()), backend=default_backend())
@@ -49,6 +58,11 @@ class AESEncrypt(Encryptor):
         :param message: a byte String containing the non-encrypted message
         :return: a byte String that will be a multiple the AES 128-bit block size
         """
+        if message is None:
+            message = ""
+
+        elif not isinstance(message, bytes):
+            raise ValueError("The argument 'message' is not of type 'bytes'")
 
         # if the message is multiple of the 128-bit block size (16 bytes) then no padding is needed
         if len(message) % 16 == 0:
