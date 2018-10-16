@@ -7,23 +7,24 @@ class TrustIssuesChat(object):
 
     @staticmethod
     def start():
-        print("***TrustIssues Chat***")
+        print("**********TrustIssues Chat**********")
         TrustIssuesChat._home_screen()
 
     @staticmethod
     def _home_screen():
         while True:
             try:
-                selection = int(input("\n(1) Send a new message \n\n(2) Exit\n "))
-                if selection != 1 or selection != 2:
-                    print("\nNot a valid selection\n")
+                selection = int(input("\nMain Menu\n(1) Send a new message\n(2) Exit\n\nSelection: "))
+                if selection != 1 and selection != 2:
+                    print("Not a valid selection\n")
                 else:
                     break
-            except TypeError:
-                print("\nNot a valid input\n")
+            except ValueError:
+                print("Not a valid input\n")
 
-        options = {1: TrustIssuesChat._create_message(), 2: TrustIssuesChat._exit()}
-        options.get(selection)
+        # this dictionary has the function names
+        options = {1: TrustIssuesChat._create_message, 2: TrustIssuesChat._exit}
+        options[selection]()  # this calls the function using the '()' with the name selected from the dictionary
 
     @staticmethod
     def _create_message():
@@ -33,26 +34,31 @@ class TrustIssuesChat(object):
 
     @staticmethod
     def _confirm_message(message_text):
+        selection = "N"
         while True:
             try:
                 selection = str(input("Send message? (Y/N) "))
-                if selection.upper() != "Y" or selection.upper() != "N":
-                    print("\nNot a valid selection\n")
+                if selection.upper() != "Y" and selection.upper() != "N":
+                    print("Not a valid selection\n")
                 else:
                     break
-            except TypeError:
-                print("\nNot a valid input\n")
-        options = {"Y": TrustIssuesChat._send_message(message_text), "N": TrustIssuesChat._home_screen()}
-        return options.get(selection.upper())
+            except ValueError:
+                print("Not a valid input\n")
+            finally:
+                if selection.upper() == "Y":
+                    TrustIssuesChat._send_message(message_text)
+                elif selection.upper() == "N":
+                    TrustIssuesChat._home_screen()
+
 
     @staticmethod
     def _send_message(message_text):
 
         if isinstance(message_text, str):
-            message_text.encode()
+            message_text = message_text.encode()
         elif isinstance(message_text, bytes):
             raise TypeError("The argument 'message_text' is not of type 'str' or type 'bytes'")
-    
+
         message_obj = PlaintextMessage(message_text)
         controller = EncryptionController(message_obj, "C:\\Users\\tlindblom\\RSAKeys\\public.pem")
         encrypted_message_obj = controller.encrypt_message()
@@ -61,8 +67,8 @@ class TrustIssuesChat(object):
             print("\nUnable to send message")
 
         else:
-            pass
-            # send to output class or server
+            print(encrypted_message_obj.get_text())
+            # eventually pass to server, for now call the decryption controller and pass its output to the output class
 
     @staticmethod
     def _exit():

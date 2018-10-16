@@ -5,14 +5,14 @@ class MessageInput(object):
     def read_message():
         while True:
             try:
-                message_text = str(input("\nEnter message: "))
+                message_text = str(input("Enter message: "))
                 if message_text.strip() == "":
-                    print("\nNot a valid message\n")
+                    print("Not a valid message\n")
                 else:
                     break
 
             except TypeError:
-                print("\nNot a valid message\n")
+                print("Not a valid message\n")
 
         return message_text
 
