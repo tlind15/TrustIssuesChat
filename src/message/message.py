@@ -28,9 +28,10 @@ class PlaintextMessage(Message):
         """
         return self.text
 
+
 class EncryptedMessage(Message):
 
-    def __init__(self, key_ciphertext, message_ciphertext, message_authentication_tag=None):
+    def __init__(self, key_ciphertext, message_ciphertext, initialization_vector=None, message_authentication_tag=None):
         """
         Contains the encrypted ciphertext and the corresponding key which is itself encrypted
 
@@ -42,6 +43,7 @@ class EncryptedMessage(Message):
         self.key_ciphertext = key_ciphertext
         self._message_ciphertext = message_ciphertext
         self.message_authentication_tag = message_authentication_tag
+        self.initialization_vector = initialization_vector
 
     def get_text(self):
         """

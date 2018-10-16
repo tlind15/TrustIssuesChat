@@ -32,11 +32,12 @@ class AESEncrypt(Encryptor):
             raise ValueError("The argument 'key' is not 256 bits in length")
 
         algorithm = AES(key)
-        cipher = Cipher(algorithm, mode=modes.CBC(self.get_iv()), backend=default_backend())
+        iv = self.get_iv()
+        cipher = Cipher(algorithm, mode=modes.CBC(iv), backend=default_backend())
 
         # .update() encrypts the message and .finalize() returns the encrypted data
         encrypted_text = cipher.encryptor().update(self.pad_data(message_text)) + cipher.encryptor().finalize()
-        return encrypted_text, key
+        return encrypted_text, key, iv
 
     def get_key(self):
         """

@@ -36,7 +36,7 @@ class EncryptionController(object):
 
         # we don't have to check the type of the key path since that was done in the constructor
 
-        aes_ciphertext, aes_key = self._perform_message_encrpytion(self.message_obj.get_text())
+        aes_ciphertext, aes_key, iv = self._perform_message_encrpytion(self.message_obj.get_text())
         hash_message_text, mac_key = self._generate_integrity_tag(aes_ciphertext)
         rsa_ciphertext = self._perform_rsa_encryption(aes_key + mac_key, self.rsa_public_key_path)
 
@@ -44,7 +44,7 @@ class EncryptionController(object):
             return None
         else:
             return EncryptedMessage(key_ciphertext=rsa_ciphertext, message_ciphertext=aes_ciphertext,
-                                    message_authentication_tag=hash_message_text)
+                                    initialization_vector=iv, message_authentication_tag=hash_message_text)
 
     def _perform_message_encrpytion(self, message_text):
         """

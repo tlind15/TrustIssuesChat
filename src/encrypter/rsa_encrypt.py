@@ -57,11 +57,3 @@ class RSAEncrypt(Encryptor):
 
         return public_key
 
-    '''def get_priv_key(self, key_path):
-        with open(key_path, "rb") as key_file:
-            private_key = load_pem_private_key(
-                key_file.read(),
-                password=None,
-                backend=default_backend()
-            )
-        return private_key'''

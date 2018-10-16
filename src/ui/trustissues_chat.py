@@ -1,6 +1,7 @@
 from src.ui.input import MessageInput
 from src.message.message import PlaintextMessage, EncryptedMessage
 from src.encrypter.controller import EncryptionController
+from src.temp_decrypt.controller import  DecryptionController
 
 
 class TrustIssuesChat(object):
@@ -67,8 +68,8 @@ class TrustIssuesChat(object):
             print("\nUnable to send message")
 
         else:
-            print(encrypted_message_obj.get_text())
-            # eventually pass to server, for now call the decryption controller and pass its output to the output class
+            controller = DecryptionController(encrypted_message_obj, "C:\\Users\\tlindblom\\RSAKeys\\private.pem")
+            print(controller.decrypt_message().get_text().decode())
 
     @staticmethod
     def _exit():
