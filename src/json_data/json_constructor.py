@@ -1,10 +1,5 @@
-from src.json_data.json_constructor_strategy import *
+class JsonConstructor(object):
 
-
-class JsonConstructor:
-
-    def __init__(self, json_constructor_strategy):
-        self._strategy = json_constructor_strategy
-
-    def build_json(self):
-        return self._strategy.construct_json()
+    @staticmethod
+    def build_json(json_constructor_strategy):
+        return json_constructor_strategy.construct_json()

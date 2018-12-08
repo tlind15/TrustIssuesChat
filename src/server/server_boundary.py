@@ -1,7 +1,4 @@
-from src.server.server_command import *
-
-
-class ServerBoundary:
+class ServerBoundary(object):
 
     @staticmethod
     def send_request(server_command):

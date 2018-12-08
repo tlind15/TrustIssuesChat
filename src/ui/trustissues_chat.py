@@ -1,7 +1,6 @@
 from src.ui.input import MessageInput
-from src.message.message import PlaintextMessage, EncryptedMessage
-from src.encrypter.controller import EncryptionController
-from src.temp_decrypt.controller import  DecryptionController
+from src.message.send_message_controller import SendMessageController
+from src.temp_decrypt.controller import DecryptionController
 
 
 class TrustIssuesChat(object):
@@ -51,25 +50,12 @@ class TrustIssuesChat(object):
                 elif selection.upper() == "N":
                     TrustIssuesChat._home_screen()
 
-
     @staticmethod
     def _send_message(message_text):
-
-        if isinstance(message_text, str):
-            message_text = message_text.encode()
-        elif isinstance(message_text, bytes):
-            raise TypeError("The argument 'message_text' is not of type 'str' or type 'bytes'")
-
-        message_obj = PlaintextMessage(message_text)
-        controller = EncryptionController(message_obj, "C:\\Users\\tlindblom\\RSAKeys\\public.pem")
-        encrypted_message_obj = controller.encrypt_message()
-
-        if encrypted_message_obj is None:
-            print("\nUnable to send message")
-
-        else:
-            controller = DecryptionController(encrypted_message_obj, "C:\\Users\\tlindblom\\RSAKeys\\private.pem")
-            print(controller.decrypt_message().get_text().decode())
+            controller = SendMessageController('''session''')
+            controller.send_message(message_text, '''recipient_username''')
+            # controller = DecryptionController(encrypted_message_obj, "C:\\Users\\tlindblom\\RSAKeys\\private.pem")
+            # print(controller.decrypt_message().get_text().decode())
 
     @staticmethod
     def _exit():
