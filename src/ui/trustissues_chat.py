@@ -1,6 +1,8 @@
 from src.ui.input import MessageInput
 from src.message.send_message_controller import SendMessageController
 from src.authentication.session_initializer import SessionInitializer
+from src.message.receive_message_controller import ReceiveMessageController
+from src.temp_decrypt.controller import DecryptionController
 
 
 class TrustIssuesChat(object):
@@ -17,7 +19,7 @@ class TrustIssuesChat(object):
     def _home_screen():
         while True:
             try:
-                selection = int(input("\nMain Menu\n(1) Send a new message\n(2) Exit\n\nSelection: "))
+                selection = int(input("\nMain Menu\n(1) Send a new message\n(2) Check Messages\n(3) Exit\n\nSelection: "))
                 if selection != 1 and selection != 2:
                     print("Not a valid selection\n")
                 else:
@@ -26,7 +28,7 @@ class TrustIssuesChat(object):
                 print("Not a valid input\n")
 
         # this dictionary has the function names
-        options = {1: TrustIssuesChat._create_message, 2: TrustIssuesChat._exit}
+        options = {1: TrustIssuesChat._create_message, 2: TrustIssuesChat._check_messages, 3: TrustIssuesChat._exit}
         options[selection]()  # this calls the function using the '()' with the name selected from the dictionary
 
     @staticmethod
@@ -57,8 +59,19 @@ class TrustIssuesChat(object):
     def _send_message(message_text):
             controller = SendMessageController(TrustIssuesChat.session)
             response = controller.send_message(message_text, MessageInput.read_recipient())
-            # controller = DecryptionController(encrypted_message_obj, "C:\\Users\\tlindblom\\RSAKeys\\private.pem")
-            # print(controller.decrypt_message().get_text().decode())
+            TrustIssuesChat._home_screen()
+
+    @staticmethod
+    def _check_messages():
+        data = ReceiveMessageController.get_messages(TrustIssuesChat.session.user.username,
+                                                         TrustIssuesChat.session.jwt_token)
+        controller = DecryptionController("C:\\Users\\tlindblom\\RSAKeys\\private.pem")
+        plaintext_messages = []
+        for entry in data:
+            plaintext_messages.append(controller.decrypt_message(entry["message"]))
+        for msg in plaintext_messages:
+            print(msg.get_text().decode())
+        TrustIssuesChat._home_screen()
 
     @staticmethod
     def _exit():

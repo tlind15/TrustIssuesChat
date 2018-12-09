@@ -11,7 +11,6 @@ class LoginController(object):
     def login(user):
         data = JsonConstructor.build_json(SignupLoginJsonStrategy(user))
         response = ServerBoundary.send_request(LoginCommand(data)).json()
-        print(response)
         config = JWTConfig()
         config.set_username(user.username).commit_changes()
         return response["data"]

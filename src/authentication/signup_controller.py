@@ -4,6 +4,7 @@ from src.server.server_boundary import ServerBoundary
 from src.server.server_command import SignupCommand
 from src.configuration.jwt_config import JWTConfig
 
+
 class SignupController(object):
 
     @staticmethod

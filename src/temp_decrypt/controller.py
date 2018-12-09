@@ -6,24 +6,23 @@ from src.message.message import PlaintextMessage
 
 class DecryptionController(object):
 
-    def __init__(self, encrypted_message_obj, rsa_private_key_path):
-        self.encrypted_message_obj = encrypted_message_obj
+    def __init__(self, rsa_private_key_path):
         self.rsa_private_key_path = rsa_private_key_path
 
-    def decrypt_message(self):
+    def decrypt_message(self, encrypted_message_obj):
         rsa_decrpyptor = RSADecrypt()
-        key_plaintext = rsa_decrpyptor.decrypt(self.encrypted_message_obj.key_ciphertext,
+        key_plaintext = rsa_decrpyptor.decrypt(encrypted_message_obj.key_ciphertext,
                                                rsa_decrpyptor.get_priv_key(self.rsa_private_key_path))
 
         key_plaintext_length = len(key_plaintext)
         aes_key = key_plaintext[:key_plaintext_length//2]
         hmac_key = key_plaintext[key_plaintext_length//2:]
-        is_message_authentic = AuthenticateMessage.authenticate(self.encrypted_message_obj.get_text(), hmac_key,
-                                                                self.encrypted_message_obj.message_authentication_tag)
+        is_message_authentic = AuthenticateMessage.authenticate(encrypted_message_obj.get_text(), hmac_key,
+                                                                encrypted_message_obj.message_authentication_tag)
         if is_message_authentic:
             aes_decryptor = AESDecrypt()
-            plaintext_message = aes_decryptor.decrypt(self.encrypted_message_obj.get_text(), aes_key,
-                                                      self.encrypted_message_obj.initialization_vector)
+            plaintext_message = aes_decryptor.decrypt(encrypted_message_obj.get_text(), aes_key,
+                                                      encrypted_message_obj.initialization_vector)
             return PlaintextMessage(plaintext_message)
         else:
             return None

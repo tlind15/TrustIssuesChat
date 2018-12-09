@@ -37,7 +37,7 @@ class CheckMessagesCommand(ServerCommand):
         self.url = self.base_url + "/check-messages"
 
     def execute(self):
-        header = {"Authorization": "Bearer " + self._token}
+        header = {u'content-type': u'application/json', "Authorization": "Bearer " + self._token}
         return requests.get(self.url, params=self.data, headers=header).json()
 
 
