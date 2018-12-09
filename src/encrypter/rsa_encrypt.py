@@ -4,6 +4,7 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.serialization import load_pem_public_key, load_pem_private_key
 from cryptography.hazmat.backends import default_backend
 
+
 class RSAEncrypt(Encryptor):
 
     def encrypt(self, message, key):

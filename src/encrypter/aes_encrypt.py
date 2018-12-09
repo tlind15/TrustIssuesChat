@@ -66,7 +66,6 @@ class AESEncrypt(Encryptor):
             message = ""
 
         elif isinstance(message, str):
-            #b64encode(message.encode())
             message.encode("utf-8")
 
         elif not isinstance(message, bytes):
