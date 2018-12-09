@@ -29,7 +29,8 @@ class EncryptionController(object):
 
         # we need to make sure the message_text parameter in the message_obj is of a correct type
         if isinstance(self.message_obj.get_text(), str):
-            self.message_obj.get_text().encode()
+            #self.message_obj.get_text().encode())
+            self.message_obj.get_text().encode("utf-8")
 
         elif not isinstance(self.message_obj.get_text(), bytes):
             raise TypeError("The message text is not of type 'bytes'")

@@ -22,4 +22,4 @@ class MessageInput(object):
 
     @staticmethod
     def read_recipient():
-        pass
+        return input("\nWho are you sending the message to? ")

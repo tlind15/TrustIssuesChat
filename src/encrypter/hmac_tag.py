@@ -19,7 +19,7 @@ class HMAC(object):
         :return: a HMACHashedMessage object containing the hashed integrity tag, the key, and hashing algorithm used
         """
         if isinstance(message_text, str):
-            message_text.encode()
+            message_text.encode("utf-8")
 
         elif not isinstance(message_text, bytes):
             raise TypeError("The argument 'message_text' is not of type 'bytes'")

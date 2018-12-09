@@ -1,13 +1,16 @@
 from src.ui.input import MessageInput
 from src.message.send_message_controller import SendMessageController
-from src.temp_decrypt.controller import DecryptionController
+from src.authentication.session_initializer import SessionInitializer
 
 
 class TrustIssuesChat(object):
 
+    session = None
+
     @staticmethod
     def start():
         print("**********TrustIssues Chat**********")
+        TrustIssuesChat.session = SessionInitializer.initialize_session()
         TrustIssuesChat._home_screen()
 
     @staticmethod
@@ -52,8 +55,8 @@ class TrustIssuesChat(object):
 
     @staticmethod
     def _send_message(message_text):
-            controller = SendMessageController('''session''')
-            controller.send_message(message_text, '''recipient_username''')
+            controller = SendMessageController(TrustIssuesChat.session)
+            response = controller.send_message(message_text, MessageInput.read_recipient())
             # controller = DecryptionController(encrypted_message_obj, "C:\\Users\\tlindblom\\RSAKeys\\private.pem")
             # print(controller.decrypt_message().get_text().decode())
 

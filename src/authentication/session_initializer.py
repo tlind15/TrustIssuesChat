@@ -1,9 +1,8 @@
 from src.authentication.session import Session
 from src.configuration.jwt_config import JWTConfig
-from src.json_data.json_constructor import JsonConstructor
-from src.json_data.json_constructor_strategy import CheckTokenJsonStrategy
-from src.server.server_boundary import ServerBoundary
-from src.server.server_command import CheckTokenCommand
+from src.authentication.signup_controller import SignupController
+from src.authentication.login_controller import LoginController
+from src.ui.authentication_ui import AuthenticationUI
 
 
 class SessionInitializer(object):
@@ -12,9 +11,14 @@ class SessionInitializer(object):
     def initialize_session():
         jwt_config = JWTConfig()
         if not jwt_config.does_configuration_exist():
-            pass # send to signup
+            user = AuthenticationUI.signup()
+            token = SignupController.signup(user)
 
         else:
+            user = AuthenticationUI.login()
+            token = LoginController.login(user)
+
+        '''else:
             if jwt_config.get_token() is None:
                 pass # send to login
 
@@ -22,9 +26,9 @@ class SessionInitializer(object):
                 data = JsonConstructor.build_json(CheckTokenJsonStrategy(jwt_config.get_username()))
                 response = ServerBoundary.send_request(CheckTokenCommand(data))
                 if not response["status"]:
-                    pass # send to login
-
-        return Session(jwt_config.get_username(), jwt_config.get_token())
+                    pass # send to login'''
+        jwt_config.set_token(token).commit_changes()
+        return Session(user, token)
 
 
 

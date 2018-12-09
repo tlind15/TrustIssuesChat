@@ -12,7 +12,7 @@ class SignupLoginJsonStrategy(JsonConstructorStrategy):
         self._user = user
 
     def construct_json(self):
-        return {"username": self._user.username, "password": self._user.password}
+        return {'username': self._user.username, 'password': self._user.password}
 
 
 class SendMessageJsonStrategy(JsonConstructorStrategy):

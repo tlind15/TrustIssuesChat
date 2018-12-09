@@ -13,7 +13,7 @@ class SendMessageController(object):
     def send_message(self, message_text, recipient_username):
 
         if isinstance(message_text, str):
-            message_text = message_text.encode()
+            message_text = message_text.encode("utf-8")
         elif isinstance(message_text, bytes):
             raise TypeError("The argument 'message_text' is not of type 'str' or type 'bytes'")
 
@@ -25,6 +25,7 @@ class SendMessageController(object):
             print("\nUnable to send message")
 
         else:
-            json_data = JsonConstructor.build_json(SendMessageJsonStrategy(self._session.user.username,
+            json_data = JsonConstructor.build_json(SendMessageJsonStrategy(self._session.user,
                                                                            encrypted_message_obj, recipient_username))
-            ServerBoundary.send_request(SendMessageCommand(json_data, self._session.jwt_token))
+            r = ServerBoundary.send_request(SendMessageCommand(json_data, self._session.jwt_token))
+            print(r.text)

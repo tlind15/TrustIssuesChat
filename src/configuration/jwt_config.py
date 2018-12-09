@@ -12,12 +12,17 @@ class JWTConfig(object):
 
     def does_configuration_exist(self):
         self._read_configuration()
-        return self._configuration is not None and self._configuration.strip() != ""
+        config_exists = self._configuration is not None
+        print(config_exists)
+        return config_exists
 
     def _read_configuration(self):
-        with open(self._filename, "r") as reader:
-            self._configuration = json.loads(reader.read())
-            reader.close()
+        try:
+            with open(self._filename, "r+") as reader:
+                self._configuration = json.loads(reader.read())
+                reader.close()
+        except FileNotFoundError:
+            return
 
     def _write_configuration(self):
         with open(self._filename, "w") as writer:
@@ -28,14 +33,23 @@ class JWTConfig(object):
         if self._configuration is None:
             self._read_configuration()
         self._configuration["token"] = token
-        self._write_configuration()
+        return self
 
     def get_token(self):
         if self._configuration is None:
             self._read_configuration()
         return self._configuration["token"]
 
+    def set_username(self, username):
+        if self._configuration is None:
+            self._read_configuration()
+        self._configuration["username"] = username
+        return self
+
     def get_username(self):
         if self._configuration is None:
             self._read_configuration()
         return self._configuration["username"]
+
+    def commit_changes(self):
+        self._write_configuration()
