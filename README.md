@@ -23,5 +23,5 @@ python main.py
 ### From any IDE
 Run `main.py`
 
-## Documentation
+## More detailed documentation
 [Check out the Wiki](https://github.com/tlind15/TrustIssuesChat/wiki)
