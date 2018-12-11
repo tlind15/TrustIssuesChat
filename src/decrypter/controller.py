@@ -1,6 +1,6 @@
-from src.temp_decrypt.aes_decrypt import AESDecrypt
-from src.temp_decrypt.rsa_decrypt import RSADecrypt
-from src.temp_decrypt.message_authentication import AuthenticateMessage
+from src.decrypter.aes_decrypt import AESDecrypt
+from src.decrypter.rsa_decrypt import RSADecrypt
+from src.decrypter.message_authentication import AuthenticateMessage
 from src.message.message import PlaintextMessage
 
 

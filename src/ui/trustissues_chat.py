@@ -3,7 +3,7 @@ from src.ui.friends_ui import FriendRequestUI
 from src.message.send_message_controller import SendMessageController
 from src.authentication.session_initializer import SessionInitializer
 from src.message.receive_message_controller import ReceiveMessageController
-from src.temp_decrypt.controller import DecryptionController
+from src.decrypter.controller import DecryptionController
 from src.friends.friend_requests import GetPendingFriendRequestController
 from src.friends.add_friends import AddRSADetailsOfFriendsController
 

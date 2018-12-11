@@ -1,4 +1,4 @@
-from src.temp_decrypt.decryptor import Decryptor
+from src.decrypter.decryptor import Decryptor
 from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.primitives.ciphers.algorithms import AES
 from cryptography.hazmat.primitives.ciphers import Cipher, modes
