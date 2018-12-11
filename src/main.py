@@ -1,3 +1,4 @@
 from src.ui.trustissues_chat import TrustIssuesChat
 
-TrustIssuesChat.start()
+if __name__ == "__main__":
+    TrustIssuesChat.start()
