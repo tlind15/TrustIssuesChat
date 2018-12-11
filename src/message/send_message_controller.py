@@ -10,7 +10,7 @@ class SendMessageController(object):
     def __init__(self, session):
         self._session = session
 
-    def send_message(self, message_text, recipient_username):
+    def send_message(self, message_text, recipient_email):
 
         if isinstance(message_text, str):
             message_text = message_text.encode("utf-8")
@@ -18,7 +18,8 @@ class SendMessageController(object):
             raise TypeError("The argument 'message_text' is not of type 'str' or type 'bytes'")
 
         message_obj = PlaintextMessage(message_text)
-        controller = EncryptionController(message_obj, "C:\\Users\\tlindblom\\RSAKeys\\public.pem")
+        # "C:\\Users\\tlindblom\\RSAKeys\\public.pem"
+        controller = EncryptionController(message_obj, self._session.rsa_config.friends_rsa[recipient_email])
         encrypted_message_obj = controller.encrypt_message()
 
         if encrypted_message_obj is None:
@@ -26,6 +27,6 @@ class SendMessageController(object):
 
         else:
             json_data = JsonConstructor.build_json(SendMessageJsonStrategy(self._session.user,
-                                                                           encrypted_message_obj, recipient_username))
-            r = ServerBoundary.send_request(SendMessageCommand(json_data, self._session.jwt_token))
+                                                                           encrypted_message_obj, recipient_email))
+            r = ServerBoundary.send_request(SendMessageCommand(json_data, self._session.token))
             print(r.text)

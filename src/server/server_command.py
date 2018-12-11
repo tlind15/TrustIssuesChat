@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import json
 import requests
-from base64 import b64encode, b64decode
+from base64 import b64encode
 
 
 class ServerCommand(ABC):
@@ -37,8 +37,8 @@ class CheckMessagesCommand(ServerCommand):
         self.url = self.base_url + "/check-messages"
 
     def execute(self):
-        header = {u'content-type': u'application/json', "Authorization": "Bearer " + self._token}
-        return requests.get(self.url, params=self.data, headers=header).json()
+        headers = {u'content-type': u'application/json', "Authorization": "Bearer " + self._token}
+        return requests.post(self.url, headers=headers, data=json.dumps(self.data))
 
 
 class SignupCommand(ServerCommand):
@@ -61,10 +61,45 @@ class LoginCommand(ServerCommand):
         return requests.post(self.url, headers=headers, data=json.dumps(self.data))
 
 
-class CheckTokenCommand(ServerCommand):
-    def __init__(self, data):
+class SendFriendRequestCommand(ServerCommand):
+    def __init__(self, data, token):
         super().__init__(data)
-        self.url = self.base_url + "/check-valid-token"
+        self._token = token
+        self.url = self.base_url + "/send-friend-request"
 
     def execute(self):
-        return requests.get(self.url, params=self.data)
+        headers = {u'content-type': u'application/json', "Authorization": "Bearer " + self._token}
+        return requests.post(self.url, headers=headers, data=json.dumps(self.data))
+
+
+class GetPendingFriendRequestsCommand(ServerCommand):
+    def __init__(self, data, token):
+        super().__init__(data)
+        self._token = token
+        self.url = self.base_url + "/check-friend-requests"
+
+    def execute(self):
+        headers = {u'content-type': u'application/json', "Authorization": "Bearer " + self._token}
+        return requests.post(self.url, headers=headers, data=json.dumps(self.data))
+
+
+class AddFriendCommand(ServerCommand):
+    def __init__(self, data, token):
+        super().__init__(data)
+        self._token = token
+        self.url = self.base_url + "/add-friend"
+
+    def execute(self):
+        headers = {u'content-type': u'application/json', "Authorization": "Bearer " + self._token}
+        return requests.post(self.url, headers=headers, data=json.dumps(self.data))
+
+
+class GetFriendsCommand(ServerCommand):
+    def __init__(self, data, token):
+        super().__init__(data)
+        self._token = token
+        self.url = self.base_url + "/get-friends"
+
+    def execute(self):
+        headers = {u'content-type': u'application/json', "Authorization": "Bearer " + self._token}
+        return requests.post(self.url, headers=headers, data=json.dumps(self.data))
