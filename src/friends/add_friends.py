@@ -15,12 +15,10 @@ class AddRSADetailsOfFriendsController(object):
         my_public_key = session.rsa_config.my_rsa["public key"]
         for friend in friends:
             if friend not in friend_dict:
-                print('\nYou have a new friend: ' + friend)
-                print('\nLet\' send them your RSA public key')
+                print('\n' + friend + ' accepted your friend request')
+                print('\nSend them your RSA public key')
                 session.rsa_config.add_to_friends_rsa(friend, None)
                 SendEmail.send_email(friend, my_public_key)
-
-        print(session.rsa_config.friends_rsa)
 
     @staticmethod
     def _get_friends(session):

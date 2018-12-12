@@ -78,11 +78,13 @@ class TrustIssuesChat(object):
         data = ReceiveMessageController.get_messages(TrustIssuesChat.session)
         # "C:\\Users\\tlindblom\\RSAKeys\\private.pem"
         controller = DecryptionController(TrustIssuesChat.session.rsa_config.my_rsa["private key"])
-        plaintext_messages = []
         for entry in data:
-            plaintext_messages.append(controller.decrypt_message(entry["message"]))
-        for msg in plaintext_messages:
-            print(msg.get_text().decode())
+            plaintext_message = controller.decrypt_message(entry["message"])
+            sender = entry["sender"]
+            time = entry["time"]
+            print("\nMessage from: " + sender)
+            print("Time sent:" + time)
+            print("Message: " + plaintext_message.get_text().decode())
         TrustIssuesChat._home_screen()
 
     @staticmethod

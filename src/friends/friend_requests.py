@@ -20,7 +20,6 @@ class GetPendingFriendRequestController(object):
         data = JsonConstructor.build_json(GetPendingFriendRequestsJsonStrategy(session .user,
                                                                                session.user_config
                                                                                .config_data["request poll"]))
-        print(data)
         session.user_config.update_request_poll()
         response = ServerBoundary.send_request(GetPendingFriendRequestsCommand(data, session.token)).json()
         requests = response["data"]
@@ -44,6 +43,5 @@ class GetPendingFriendRequestController(object):
     def _add_friend(primary_user, email_of_requester, token):
         data = JsonConstructor.build_json(AddFriendJsonStrategy(primary_user, email_of_requester))
         response = ServerBoundary.send_request(AddFriendCommand(data, token))
-        print(response.text)
 
 

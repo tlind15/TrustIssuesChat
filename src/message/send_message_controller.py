@@ -29,4 +29,3 @@ class SendMessageController(object):
             json_data = JsonConstructor.build_json(SendMessageJsonStrategy(self._session.user,
                                                                            encrypted_message_obj, recipient_email))
             r = ServerBoundary.send_request(SendMessageCommand(json_data, self._session.token))
-            print(r.text)

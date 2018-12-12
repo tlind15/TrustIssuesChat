@@ -75,7 +75,6 @@ class AESEncrypt(Encryptor):
         if len(message) % 16 == 0:
             return message
         else:
-            print(message)
             padder = padding.PKCS7(128).padder()
             padded_data = padder.update(message)  # returns the additional padded data
             padded_data += padder.finalize()  # concatenates the padded data with the original data
